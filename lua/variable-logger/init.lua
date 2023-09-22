@@ -17,13 +17,22 @@ local log_types = {
   lua = "print",
 }
 
+---@param label string
 ---@param regex string
-local function optional_match(regex)
+local function optional_match(label, regex)
+  local extracted = label:match(regex)
+  if extracted == nil then
+    extracted = label
+  end
 
+  return extracted
 end
 
 ---@return string, string
 local function get_label_and_variable()
+  local extract_string_after_space = ".*%s+(.+)$"
+  local extract_variable_in_parenthesis = "^%((.*)%)"
+
   local label = vim.treesitter.get_node()
   local variable = label:parent()
   label = vim.treesitter.get_node_text(label, 0)
@@ -31,22 +40,12 @@ local function get_label_and_variable()
   variable = variable:match("^([^,;:=]*)") -- get string before , ; : =
   variable = variable:gsub("%s+$", "")    -- remove trailing spaces
 
-  local ex1 = label:match(".*%s+(.+)$")   -- extract string after a space
-  if ex1 == nil then
-    ex1 = label
-  end
+  label = optional_match(label, extract_string_after_space)
 
-  local ex = variable:match(".*%s+(.+)$") -- extract string after a space
-  if ex == nil then
-    ex = variable
-  end
+  variable = optional_match(variable, extract_string_after_space)
+  variable = optional_match(variable, extract_variable_in_parenthesis)
 
-  local extracted = ex:match("^%((.*)%)") -- extract variable in parenthesis
-  if extracted == nil then
-    extracted = ex
-  end
-
-  return ex1, extracted
+  return label, variable
 end
 
 ---@return string
