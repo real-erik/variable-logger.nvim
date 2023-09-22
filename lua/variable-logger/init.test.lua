@@ -7,13 +7,13 @@ variable_logger.setup({
 describe("log_variable", function()
   describe("regular variable", function()
     before_each(function()
-      vim.cmd.e("./lua/variable-logger/test-file.js")
+      vim.cmd.e("./lua/variable-logger/test-files/test-file.js")
       vim.api.nvim_win_set_cursor(0, { 1, 0 })
       vim.api.nvim_command("/turtle")
     end)
 
     after_each(function()
-      vim.cmd.bd("./lua/variable-logger/test-file.js")
+      vim.cmd.bd("./lua/variable-logger/test-files/test-file.js")
     end)
 
     it("logs variable with config prefix", function()
@@ -42,11 +42,11 @@ describe("log_variable", function()
 
   describe("non regular variable", function()
     before_each(function()
-      vim.cmd.e("./lua/variable-logger/test-file.js")
+      vim.cmd.e("./lua/variable-logger/test-files/test-file.js")
     end)
 
     after_each(function()
-      vim.cmd.bd("./lua/variable-logger/test-file.js")
+      vim.cmd.bd("./lua/variable-logger/test-files/test-file.js")
     end)
 
     it("logs variable", function()
@@ -110,5 +110,79 @@ describe("log_variable", function()
       local register_value = vim.fn.getreg("")
       assert.equal("console.log('🪵🪵🪵 - turtle', turtle)\n", register_value)
     end)
+
+    it("word before equals sign", function()
+      vim.api.nvim_win_set_cursor(0, { 15, 0 })
+      vim.api.nvim_command("/turtle")
+      vim.api.nvim_command("normal! n")
+
+      variable_logger.log_variable()
+
+      local register_value = vim.fn.getreg("")
+      assert.equal("console.log('🪵🪵🪵 - turtle', turtle)\n", register_value)
+    end)
   end)
+
+  describe("file type specific log statements", function()
+    it("js", function()
+      vim.cmd.e("./lua/variable-logger/test-files/test-file.js")
+      vim.api.nvim_win_set_cursor(0, { 1, 0 })
+      vim.api.nvim_command("/turtle")
+
+      variable_logger.log_variable()
+
+      local register_value = vim.fn.getreg("")
+      assert.equal("console.log('🪵🪵🪵 - turtle', turtle)\n", register_value)
+    end)
+
+    it("jsx", function()
+      vim.cmd.e("./lua/variable-logger/test-files/test-file.js")
+      vim.api.nvim_win_set_cursor(0, { 1, 0 })
+      vim.api.nvim_command("/turtle")
+
+      variable_logger.log_variable()
+
+      local register_value = vim.fn.getreg("")
+      assert.equal("console.log('🪵🪵🪵 - turtle', turtle)\n", register_value)
+    end)
+
+    it("ts", function()
+      vim.cmd.e("./lua/variable-logger/test-files/test-file.js")
+      vim.api.nvim_win_set_cursor(0, { 1, 0 })
+      vim.api.nvim_command("/turtle")
+
+      variable_logger.log_variable()
+
+      local register_value = vim.fn.getreg("")
+      assert.equal("console.log('🪵🪵🪵 - turtle', turtle)\n", register_value)
+    end)
+
+    it("tsx", function()
+      vim.cmd.e("./lua/variable-logger/test-files/test-file.js")
+      vim.api.nvim_win_set_cursor(0, { 1, 0 })
+      vim.api.nvim_command("/turtle")
+
+      variable_logger.log_variable()
+
+      local register_value = vim.fn.getreg("")
+      assert.equal("console.log('🪵🪵🪵 - turtle', turtle)\n", register_value)
+    end)
+
+    it("lua", function()
+      vim.cmd.e("./lua/variable-logger/test-files/test-file.lua")
+      vim.api.nvim_win_set_cursor(0, { 1, 0 })
+      vim.api.nvim_command("/turtle")
+
+      variable_logger.log_variable()
+
+      local register_value = vim.fn.getreg("")
+      assert.equal("print('🪵🪵🪵 - turtle', turtle)\n", register_value)
+    end)
+  end)
+end)
+
+it("testing", function() 
+  local match = variable_logger.testing()
+
+  assert.equal('world', match)
 end)
