@@ -17,13 +17,10 @@ local log_types = {
   lua = "print",
 }
 
-local filetypes = {
-  js = { log = log_types.js },
-  jsx = { log = log_types.js },
-  ts = { log = log_types.js },
-  tsx = { log = log_types.js },
-  lua = { log = log_types.lua },
-}
+---@param regex string
+local function optional_match(regex)
+
+end
 
 ---@return string, string
 local function get_label_and_variable()
@@ -34,12 +31,12 @@ local function get_label_and_variable()
   variable = variable:match("^([^,;:=]*)") -- get string before , ; : =
   variable = variable:gsub("%s+$", "")    -- remove trailing spaces
 
-  local ex1 = label:match(".*%s+(.+)$")
+  local ex1 = label:match(".*%s+(.+)$")   -- extract string after a space
   if ex1 == nil then
     ex1 = label
   end
 
-  local ex = variable:match(".*%s+(.+)$")
+  local ex = variable:match(".*%s+(.+)$") -- extract string after a space
   if ex == nil then
     ex = variable
   end
@@ -65,10 +62,10 @@ local function generate_log_string(log_entire_object)
   local log_string
   local filetype = guess_type()
 
-  if filetype:match("js") then
+  if filetype:match("js") or filetype:match("ts") then
     if log_entire_object == true then
-      log_string =
-      log_types.js .. "('%s', require('util').inspect(%s, {showHidden: false, depth: null, colors: true}))\n"
+      log_string = log_types.js
+          .. "('%s', require('util').inspect(%s, {showHidden: false, depth: null, colors: true}))\n"
     else
       log_string = log_types.js .. "('%s', %s)\n"
     end
@@ -91,14 +88,6 @@ function M.log_variable(prefix, log_entire_object)
   local log_string_formatted = string.format(log_string, prefixed_label, variable)
 
   vim.fn.setreg('"', log_string_formatted)
-end
-
-function M.testing()
-  local str = "Hello world"
-
-  local match = str:match(".*%s+(.+)$")
-
-  return match
 end
 
 return M

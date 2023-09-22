@@ -136,7 +136,7 @@ describe("log_variable", function()
     end)
 
     it("jsx", function()
-      vim.cmd.e("./lua/variable-logger/test-files/test-file.js")
+      vim.cmd.e("./lua/variable-logger/test-files/test-file.jsx")
       vim.api.nvim_win_set_cursor(0, { 1, 0 })
       vim.api.nvim_command("/turtle")
 
@@ -147,7 +147,7 @@ describe("log_variable", function()
     end)
 
     it("ts", function()
-      vim.cmd.e("./lua/variable-logger/test-files/test-file.js")
+      vim.cmd.e("./lua/variable-logger/test-files/test-file.ts")
       vim.api.nvim_win_set_cursor(0, { 1, 0 })
       vim.api.nvim_command("/turtle")
 
@@ -158,7 +158,7 @@ describe("log_variable", function()
     end)
 
     it("tsx", function()
-      vim.cmd.e("./lua/variable-logger/test-files/test-file.js")
+      vim.cmd.e("./lua/variable-logger/test-files/test-file.tsx")
       vim.api.nvim_win_set_cursor(0, { 1, 0 })
       vim.api.nvim_command("/turtle")
 
@@ -179,10 +179,4 @@ describe("log_variable", function()
       assert.equal("print('🪵🪵🪵 - turtle', turtle)\n", register_value)
     end)
   end)
-end)
-
-it("testing", function() 
-  local match = variable_logger.testing()
-
-  assert.equal('world', match)
 end)
