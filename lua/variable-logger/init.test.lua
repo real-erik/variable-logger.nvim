@@ -121,6 +121,39 @@ describe("log_variable", function()
       local register_value = vim.fn.getreg("")
       assert.equal("console.log('🪵🪵🪵 - turtle', turtle)\n", register_value)
     end)
+
+    it("reassigned variable", function()
+      vim.api.nvim_win_set_cursor(0, { 17, 0 })
+      vim.api.nvim_command("/turtle")
+      vim.api.nvim_command("normal! n")
+
+      variable_logger.log_variable()
+
+      local register_value = vim.fn.getreg("")
+      assert.equal("console.log('🪵🪵🪵 - turtle', turtle)\n", register_value)
+    end)
+
+    it("reassigned variable2", function()
+      vim.api.nvim_win_set_cursor(0, { 17, 0 })
+      vim.api.nvim_command("/cat")
+      vim.api.nvim_command("normal! n")
+
+      variable_logger.log_variable()
+
+      local register_value = vim.fn.getreg("")
+      assert.equal("console.log('🪵🪵🪵 - cat', cat)\n", register_value)
+    end)
+
+    it("reassigned variable2", function()
+      vim.api.nvim_win_set_cursor(0, { 17, 0 })
+      vim.api.nvim_command("/dog")
+      vim.api.nvim_command("normal! n")
+
+      variable_logger.log_variable()
+
+      local register_value = vim.fn.getreg("")
+      assert.equal("console.log('🪵🪵🪵 - dog', dog)\n", register_value)
+    end)
   end)
 
   describe("file type specific log statements", function()

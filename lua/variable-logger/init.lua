@@ -30,20 +30,16 @@ end
 
 ---@return string, string
 local function get_label_and_variable()
-  local extract_string_after_space = ".*%s+(.+)$"
-  local extract_variable_in_parenthesis = "^%((.*)%)"
-
   local label = vim.treesitter.get_node()
   local variable = label:parent()
+
   label = vim.treesitter.get_node_text(label, 0)
+  label = optional_match(label, ".*%s+(.+)$")
+
   variable = vim.treesitter.get_node_text(variable, 0)
-  variable = variable:match("^([^,;:=]*)") -- get string before , ; : =
-  variable = variable:gsub("%s+$", "")    -- remove trailing spaces
-
-  label = optional_match(label, extract_string_after_space)
-
-  variable = optional_match(variable, extract_string_after_space)
-  variable = optional_match(variable, extract_variable_in_parenthesis)
+  if not string.find(variable, "%.") then
+    variable = label
+  end
 
   return label, variable
 end
