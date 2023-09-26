@@ -9,7 +9,7 @@ Setup
 ```lua
 require("variable-logger").setup({
 	prefix = "🪵 - ",   -- Make the log more visible
-)
+})
 ```
 
 Make custom functions with defined prefixes
