@@ -12,20 +12,21 @@ require("variable-logger").setup({
 )
 ```
 
-Pass prefix with `log_variable`
+Make custom functions with defined prefixes
 
 ```lua
 local logger = require("variable-logger")
 local function logWithAsterisk()
-	logger.log_variable("******** - ") -- Make the log more visible
+	logger.log_variable("******** - ")
 end
 ```
 
 Log entire object
+
 ```lua
 local logger = require("variable-logger")
 local function logEntireObject()
-  logger.log_variable(nil, true)
+  logger.log_entire_variable("******** - ")
 end
 ```
 
@@ -36,9 +37,9 @@ vim.keymap.set("n", "<leader>yl", logWithAsterisk)
 vim.keymap.set("n", "<leader>y", logger.log_variable)
 ```
 
-
 Paste to log the variable
 
 ```
-console.log( "🪵 - someVariable", someVariable)
+log_variable        output: console.log("🪵 - someVariable", someVariable)
+log_entire_variable output: console.log("🪵 - someVariable", require("util").inspect(someVariable, {showHidden: false, depth: null, colors: true}))
 ```

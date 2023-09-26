@@ -4,7 +4,7 @@ variable_logger.setup({
   prefix = "🪵🪵🪵 - ",
 })
 
-describe("log_variable", function()
+describe("variable logger", function()
   describe("regular variable", function()
     before_each(function()
       vim.cmd.e("./lua/variable-logger/test-files/test-file.js")
@@ -31,7 +31,7 @@ describe("log_variable", function()
     end)
 
     it("logs entire js object", function()
-      variable_logger.log_variable(nil, true)
+      variable_logger.log_entire_variable()
       local register_value = vim.fn.getreg("")
       assert.equal(
         "console.log('🪵🪵🪵 - turtle', require('util').inspect(turtle, {showHidden: false, depth: null, colors: true}))\n",
