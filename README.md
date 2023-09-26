@@ -25,16 +25,15 @@ Log entire object
 
 ```lua
 local logger = require("variable-logger")
-local function logEntireObject()
-  logger.log_entire_variable("******** - ")
-end
+logger.log_entire_variable()
 ```
 
 Store log in register
 
 ```lua
-vim.keymap.set("n", "<leader>yl", logWithAsterisk)
 vim.keymap.set("n", "<leader>y", logger.log_variable)
+vim.keymap.set("n", "<leader>yl", logWithAsterisk)
+vim.keymap.set("n", "<leader>ye", logger.log_entire_variable)
 ```
 
 Paste to log the variable

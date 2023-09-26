@@ -74,11 +74,12 @@ local function generate_log_string(log_entire_object)
 end
 
 ---@param prefix string | nil
+---@param entire_object boolean | nil
 ---@return nil
-function M.log_variable(prefix)
+local function format_log_string(prefix, entire_object)
   local label, variable = get_label_and_variable()
   local prefixed_label = (prefix ~= nil and prefix or M.config.prefix) .. label
-  local log_string = generate_log_string()
+  local log_string = generate_log_string(entire_object)
   local log_string_formatted = string.format(log_string, prefixed_label, variable)
 
   vim.fn.setreg('"', log_string_formatted)
@@ -86,13 +87,14 @@ end
 
 ---@param prefix string | nil
 ---@return nil
-function M.log_entire_variable(prefix)
-  local label, variable = get_label_and_variable()
-  local prefixed_label = (prefix ~= nil and prefix or M.config.prefix) .. label
-  local log_string = generate_log_string(true)
-  local log_string_formatted = string.format(log_string, prefixed_label, variable)
+function M.log_variable(prefix)
+  format_log_string(prefix, nil)
+end
 
-  vim.fn.setreg('"', log_string_formatted)
+---@param prefix string | nil
+---@return nil
+function M.log_entire_variable(prefix)
+  format_log_string(prefix, true)
 end
 
 return M
