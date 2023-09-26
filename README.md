@@ -1,6 +1,6 @@
 # Variable-Logger.nvim
 
-Javascript logger for quick debugging
+Javascript/Lua logger for quick debugging
 
 ## Configuration
 
