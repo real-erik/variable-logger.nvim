@@ -56,7 +56,7 @@ describe("variable logger", function()
       variable_logger.log_variable()
 
       local register_value = vim.fn.getreg("")
-      assert.equal("console.log('🪵🪵🪵 - turtle', dog.cat.turtle)\n", register_value)
+      assert.equal("console.log('🪵🪵🪵 - dog.cat.turtle', dog.cat.turtle)\n", register_value)
     end)
 
     it("word with semicolon at the end", function()
@@ -97,7 +97,7 @@ describe("variable logger", function()
       variable_logger.log_variable()
 
       local register_value = vim.fn.getreg("")
-      assert.equal("console.log('🪵🪵🪵 - turtle', dog[0].cat().turtle)\n", register_value)
+      assert.equal("console.log('🪵🪵🪵 - dog[0].cat().turtle', dog[0].cat().turtle)\n", register_value)
     end)
 
     it("word with colon at the end", function()
@@ -144,7 +144,7 @@ describe("variable logger", function()
       assert.equal("console.log('🪵🪵🪵 - cat', cat)\n", register_value)
     end)
 
-    it("reassigned variable2", function()
+    it("reassigned variable3", function()
       vim.api.nvim_win_set_cursor(0, { 17, 0 })
       vim.api.nvim_command("/dog")
       vim.api.nvim_command("normal! n")
@@ -153,6 +153,39 @@ describe("variable logger", function()
 
       local register_value = vim.fn.getreg("")
       assert.equal("console.log('🪵🪵🪵 - dog', dog)\n", register_value)
+    end)
+
+    it("word before equals sign with period in string", function()
+      vim.api.nvim_win_set_cursor(0, { 19, 0 })
+      vim.api.nvim_command("/turtle")
+      vim.api.nvim_command("normal! n")
+
+      variable_logger.log_variable()
+
+      local register_value = vim.fn.getreg("")
+      assert.equal("console.log('🪵🪵🪵 - turtle', turtle)\n", register_value)
+    end)
+
+    it("word after equals sign with period in string", function()
+      vim.api.nvim_win_set_cursor(0, { 19, 0 })
+      vim.api.nvim_command("/cat")
+      vim.api.nvim_command("normal! n")
+
+      variable_logger.log_variable()
+
+      local register_value = vim.fn.getreg("")
+      assert.equal("console.log('🪵🪵🪵 - cat', cat)\n", register_value)
+    end)
+
+    it("word after period", function()
+      vim.api.nvim_win_set_cursor(0, { 19, 0 })
+      vim.api.nvim_command("/meow")
+      vim.api.nvim_command("normal! n")
+
+      variable_logger.log_variable()
+
+      local register_value = vim.fn.getreg("")
+      assert.equal("console.log('🪵🪵🪵 - cat.meow()', cat.meow())\n", register_value)
     end)
   end)
 

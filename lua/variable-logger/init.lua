@@ -28,20 +28,34 @@ local function optional_match(label, regex)
   return extracted
 end
 
----@return string, string
+---@return string
 local function get_label_and_variable()
-  local label = vim.treesitter.get_node()
-  local variable = label:parent()
+  local current_position = vim.api.nvim_win_get_cursor(0)
 
-  label = vim.treesitter.get_node_text(label, 0)
-  label = optional_match(label, ".*%s+(.+)$")
+  vim.cmd("normal! viWy")
+  local yanked_text = vim.fn.getreg('"')
+  vim.api.nvim_win_set_cursor(0, current_position)
 
-  variable = vim.treesitter.get_node_text(variable, 0)
-  if not string.find(variable, "%.") then
-    variable = label
+  vim.cmd("normal! viwy")
+  local yanked_variable = vim.fn.getreg('"')
+  vim.api.nvim_win_set_cursor(0, current_position)
+
+  if string.find(yanked_text, "%.") then
+    -- finds everything up to and including yanked_variable
+    yanked_variable = yanked_text:match("(.-" .. yanked_variable .. "[^.]*)")
+
+    -- remove leading parenthesis
+    if string.sub(yanked_variable, 1, 1) == "(" then
+      yanked_variable = string.sub(yanked_variable, 2)
+    end
+
+    -- remove ending semicolon 
+    if string.sub(yanked_variable, -1) == ";" then
+      yanked_variable = string.sub(yanked_variable, 1, -2)
+    end
   end
 
-  return label, variable
+  return yanked_variable
 end
 
 ---@return string
@@ -77,8 +91,8 @@ end
 ---@param entire_object boolean | nil
 ---@return nil
 local function format_log_string(prefix, entire_object)
-  local label, variable = get_label_and_variable()
-  local prefixed_label = (prefix ~= nil and prefix or M.config.prefix) .. label
+  local variable = get_label_and_variable()
+  local prefixed_label = (prefix ~= nil and prefix or M.config.prefix) .. variable
   local log_string = generate_log_string(entire_object)
   local log_string_formatted = string.format(log_string, prefixed_label, variable)
 
