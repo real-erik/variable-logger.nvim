@@ -19,4 +19,6 @@ const { cat: turtle } = dog;
 
 const turtle = cat.meow();
 
+cats.forEach(turtle => {})
+
 // const turtle = dog(cat.meow());

@@ -32,15 +32,15 @@ end
 local function get_label_and_variable()
   local current_position = vim.api.nvim_win_get_cursor(0)
 
-  vim.cmd("normal! viWy")
+  vim.cmd("normal! yiW")
   local yanked_text = vim.fn.getreg('"')
   vim.api.nvim_win_set_cursor(0, current_position)
 
-  vim.cmd("normal! viwy")
+  vim.cmd("normal! yiw")
   local yanked_variable = vim.fn.getreg('"')
   vim.api.nvim_win_set_cursor(0, current_position)
 
-  if string.find(yanked_text, "%.") then
+  if string.find(yanked_text, "%." .. yanked_variable) then
     -- finds everything up to and including yanked_variable
     yanked_variable = yanked_text:match("(.-" .. yanked_variable .. "[^.]*)")
 
@@ -49,7 +49,7 @@ local function get_label_and_variable()
       yanked_variable = string.sub(yanked_variable, 2)
     end
 
-    -- remove ending semicolon 
+    -- remove ending semicolon
     if string.sub(yanked_variable, -1) == ";" then
       yanked_variable = string.sub(yanked_variable, 1, -2)
     end

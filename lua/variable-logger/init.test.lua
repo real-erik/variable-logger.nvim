@@ -187,6 +187,17 @@ describe("variable logger", function()
       local register_value = vim.fn.getreg("")
       assert.equal("console.log('🪵🪵🪵 - cat.meow()', cat.meow())\n", register_value)
     end)
+
+    it("for each", function()
+      vim.api.nvim_win_set_cursor(0, { 21, 0 })
+      vim.api.nvim_command("/turtle")
+      vim.api.nvim_command("normal! n")
+
+      variable_logger.log_variable()
+
+      local register_value = vim.fn.getreg("")
+      assert.equal("console.log('🪵🪵🪵 - turtle', turtle)\n", register_value)
+    end)
   end)
 
   describe("file type specific log statements", function()
